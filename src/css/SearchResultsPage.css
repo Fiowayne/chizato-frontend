@@ -1,0 +1,107 @@
+/* src/css/SearchResultsPage.css */
+
+/*
+  Sección: Contenedor Principal
+  Propósito: Asegurar que la página de resultados tenga un espaciado adecuado
+             y que el contenido sea legible en diferentes tamaños de pantalla.
+*/
+.search-results-container {
+  padding-top: 40px; /* Espacio desde la parte superior (navbar) */
+  padding-bottom: 60px; /* Espacio en la parte inferior */
+  background-color: #212529; /* Color de fondo oscuro, similar a la navbar */
+  min-height: calc(
+    100vh - var(--navbar-height, 56px) - var(--footer-height, 60px)
+  ); /* Asegura que ocupe al menos la altura de la ventana */
+  color: #f8f9fa; /* Color de texto claro para contraste */
+}
+
+/* Variables para alturas (opcional, si las usas consistentemente) */
+:root {
+  --navbar-height: 56px; /* Altura estándar de navbar de Bootstrap */
+  --footer-height: 60px; /* Altura estimada de tu footer */
+}
+
+/*
+  Sección: Títulos y Mensajes
+  Propósito: Darle un estilo consistente a los encabezados y mensajes
+             de estado (cargando, error, sin resultados).
+*/
+.search-results-container h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #ffc107; /* Un color de acento, como el amarillo de Bootstrap warnings */
+  text-align: center; /* Centrar el título de la búsqueda */
+}
+
+.search-results-container .text-white.text-center {
+  font-size: 1.2rem;
+  padding: 20px;
+}
+
+.search-results-container .text-danger.text-center {
+  font-size: 1.2rem;
+  padding: 20px;
+  color: #dc3545; /* Rojo de Bootstrap para errores */
+}
+
+/*
+  Sección: Rejilla de Productos (si es necesario)
+  Propósito: Controlar el espaciado y alineación de las tarjetas de producto.
+             (Bootstrap ya hace mucho de esto con `row` y `col`).
+*/
+.search-results-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Centra las tarjetas si no llenan la fila */
+  gap: 20px; /* Espacio entre las tarjetas */
+  padding: 0 15px; /* Pequeño padding lateral para evitar que se peguen a los bordes */
+}
+
+/*
+  Sección: Ajustes Específicos para ProductCard (si es necesario)
+  Propósito: Sobrescribir o complementar estilos de ProductCard SÓLO en esta página.
+             Generalmente, ProductCard debe ser autocontenido.
+*/
+/* .search-results-grid .card {
+    border: 1px solid #495057;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.search-results-grid .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+} */
+
+/*
+  Sección: Responsividad
+  Propósito: Asegurar que la página se vea bien en dispositivos móviles.
+             Bootstrap ya es muy bueno en esto, pero puedes añadir ajustes finos.
+*/
+@media (max-width: 768px) {
+  .search-results-container {
+    padding-top: 20px; /* Menos padding en móviles */
+    padding-bottom: 40px;
+  }
+
+  .search-results-container h2 {
+    font-size: 1.8rem; /* Tamaño de fuente más pequeño para títulos */
+    margin-bottom: 20px;
+  }
+
+  .search-results-grid {
+    gap: 15px; /* Menos espacio entre tarjetas en móviles */
+  }
+}
+
+/* Pequeños ajustes para pantallas aún más pequeñas (ej. smartphones) */
+@media (max-width: 576px) {
+  .search-results-container {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .search-results-container h2 {
+    font-size: 1.5rem;
+  }
+}

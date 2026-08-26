@@ -1,0 +1,88 @@
+.terms-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #2c3e50;
+  width: 100%;
+  min-height: 90vh;
+  color: #ecf0f1;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.terms-image-container {
+  width: 80%;
+  max-width: 600px;
+  margin-bottom: 2rem;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.terms-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.terms-content-wrapper {
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #333;
+  border-radius: 10px;
+  padding: 2rem;
+  width: 80%;
+  max-width: 800px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.terms-title {
+  color: #e44d26;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.terms-divider {
+  border-top: 2px solid #e44d26;
+  margin-bottom: 1.5rem;
+}
+
+.terms-subtitle {
+  color: #e44d26;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.terms-scrollable {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 1rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  line-height: 1.6;
+}
+
+.terms-scrollable p,
+.terms-scrollable strong,
+.terms-scrollable h5 {
+  color: #333;
+}
+
+@media (max-width: 768px) {
+  .terms-title {
+    font-size: 2rem;
+  }
+
+  .terms-content-wrapper {
+    padding: 1.5rem;
+    width: 95%;
+  }
+
+  .terms-image-container {
+    width: 95%;
+    margin-bottom: 1.5rem;
+  }
+}

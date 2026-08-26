@@ -1,0 +1,92 @@
+/* src/css/CategoryCarousel.css */
+
+.category-carousel-container {
+  width: 100%;
+}
+
+.category-section {
+  margin-bottom: 3rem; /* Espacio entre cada sección de categoría */
+}
+
+.carousel-track {
+  display: flex;
+  overflow-x: auto; /* Permite el scroll horizontal */
+  padding-bottom: 15px; /* Espacio para la barra de scroll */
+  -webkit-overflow-scrolling: touch; /* Suavizado de scroll en iOS */
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #ffc107 #343a40; /* Color del scrollbar (thumb y track) */
+  gap: 1.5rem; /* Espacio entre las tarjetas de libros */
+  justify-content: flex-start; /* Alinea los elementos al inicio */
+
+  /* Importante: asegura que los elementos dentro tengan un ancho base y puedan encogerse/crecer */
+  align-items: stretch; /* Asegura que todas las tarjetas tengan la misma altura */
+}
+
+/* Estilos para el scrollbar en navegadores WebKit (Chrome, Safari) */
+.carousel-track::-webkit-scrollbar {
+  height: 8px;
+}
+
+.carousel-track::-webkit-scrollbar-track {
+  background: #343a40;
+  border-radius: 10px;
+}
+
+.carousel-track::-webkit-scrollbar-thumb {
+  background-color: #ffc107;
+  border-radius: 10px;
+  border: 2px solid #343a40;
+}
+
+/* AJUSTES PARA LAS TARJETAS DENTRO DEL CARRUSEL DE CATEGORÍAS */
+/* Si ProductCard tiene una clase raíz, como .product-card, aplica estos estilos ahí */
+/* O si no, asegúrate de que el ProductCard interno tenga un estilo para ser consistente */
+.carousel-track .card {
+  /* Asumiendo que ProductCard renderiza una Card de React-Bootstrap */
+  flex-shrink: 0; /* Evita que las tarjetas se encojan más allá de su tamaño base */
+  width: 250px; /* Ancho base para las tarjetas en el carrusel */
+  height: 400px; /* Altura fija para uniformidad */
+  border: 1px solid #6c757d; /* Borde más sutil que los destacados */
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #212529; /* Fondo oscuro para las tarjetas */
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.carousel-track .card .card-img-top {
+  /* Estilo para la imagen dentro de ProductCard */
+  width: 100%;
+  height: 70%; /* O ajusta según la proporción que desees para la imagen */
+  object-fit: cover; /* Recorta la imagen para que cubra el área */
+  object-position: center;
+}
+
+.carousel-track .card .card-body {
+  flex-grow: 1; /* Permite que el cuerpo de la tarjeta ocupe el espacio restante */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Para espaciar el contenido */
+  padding: 1rem;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+  .carousel-track {
+    padding-left: 15px;
+    padding-right: 15px;
+    gap: 1rem; /* Menos espacio en móviles */
+  }
+  .carousel-track .card {
+    width: 200px; /* Más pequeñas en móviles */
+    height: 350px;
+  }
+}
+
+@media (max-width: 576px) {
+  .carousel-track .card {
+    width: 180px; /* Aún más pequeñas en móviles muy chicos */
+    height: 320px;
+  }
+}

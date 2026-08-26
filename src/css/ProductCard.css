@@ -1,0 +1,140 @@
+/* src/css/ProductCard.css */
+
+.product-card {
+  position: relative;
+  width: 280px; /* Ancho fijo para cada tarjeta de producto */
+  height: 480px; /* Altura fija para cada tarjeta de producto: CRUCIAL */
+  border: 1px solid #444;
+  border-radius: 8px;
+  overflow: hidden; /* Importante para que el contenido se recorte si excede el tamaño */
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease-in-out;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.product-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 70%; /* La imagen ocupa el 70% de la altura total de la tarjeta */
+  overflow: hidden; /* Recorta la imagen si es más grande que el wrapper */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.product-card-image {
+  width: 100%;
+  height: 100%; /* La imagen ocupa el 100% del alto y ancho de su contenedor */
+  object-fit: cover; /* CLAVE: Cubre el área del contenedor, recortando si es necesario para evitar distorsión */
+  object-position: center; /* Centra la imagen dentro del contenedor */
+}
+
+/* Insignia de oferta para ProductCard */
+.product-offer-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #dc3545; /* Rojo */
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 0.8em;
+  z-index: 10;
+}
+
+.product-card-body {
+  height: 30%; /* El 30% restante de la altura de la tarjeta */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #343a40;
+  color: white;
+  padding: 10px;
+  text-align: center;
+}
+
+.product-card-body .card-title {
+  font-size: 1.1em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 5px;
+}
+
+.product-price-container {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.product-original-price {
+  text-decoration: line-through;
+  color: #dc3545; /* ROJO para el precio original tachado */
+  font-size: 0.9em;
+  margin-bottom: 2px;
+}
+
+.product-discounted-price {
+  color: #28a745; /* VERDE para el precio con descuento */
+  font-weight: bold;
+  font-size: 1.4em;
+}
+
+.product-price {
+  /* Estilo para el precio normal, sin oferta */
+  color: #007bff; /* Azul primario para el precio normal */
+  font-weight: bold;
+  font-size: 1.4em;
+}
+
+/* Media queries para responsividad (ajusta según necesites) */
+@media (max-width: 768px) {
+  .product-card {
+    width: 200px;
+    height: 360px; /* Ajustada la altura para tabletas */
+  }
+  .product-image-wrapper {
+    height: 65%;
+  }
+  .product-card-body {
+    height: 35%;
+  }
+  .product-card-body .card-title {
+    font-size: 0.9em;
+  }
+  .product-original-price,
+  .product-discounted-price,
+  .product-price {
+    font-size: 1.1em;
+  }
+}
+
+@media (max-width: 576px) {
+  .product-card {
+    width: 150px;
+    height: 280px; /* Ajustada la altura para móviles */
+  }
+  .product-image-wrapper {
+    height: 60%;
+  }
+  .product-card-body {
+    height: 40%;
+  }
+  .product-card-body .card-title {
+    font-size: 0.8em;
+  }
+  .product-original-price,
+  .product-discounted-price,
+  .product-price {
+    font-size: 1em;
+  }
+}

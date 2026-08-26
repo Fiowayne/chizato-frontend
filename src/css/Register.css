@@ -1,0 +1,52 @@
+/* Estilos para los inputs */
+.register-form .form-control {
+  background-color: #e0f2f7; /* Azul claro */
+  color: #333333; /* Texto negro */
+  border: 1px solid #007bff; /* Borde azul de Bootstrap */
+}
+
+/* Estilos para el placeholder */
+.register-form .form-control::placeholder {
+  color: #6c757d; /* Un gris más oscuro para el placeholder */
+  opacity: 1; /* Para Firefox */
+}
+
+/* Estilos para el botón Registrarse */
+.register-form .btn-register {
+  background-color: #007bff; /* Color azul primario de Bootstrap */
+  border-color: #007bff;
+  width: auto; /* Permite que el botón sea más pequeño */
+  padding: 0.5rem 1.5rem; /* Ajusta el padding para un tamaño más compacto */
+  font-size: 1rem; /* Tamaño de fuente estándar */
+  display: block; /* Para centrarlo si es más pequeño */
+  margin: 0 auto; /* Centra el botón si es 'auto' width */
+}
+
+.register-form .btn-register:hover {
+  background-color: #0056b3; /* Azul más oscuro al pasar el ratón */
+  border-color: #0056b3;
+}
+/* Estilos para los labels de los checkboxes */
+/* --- CAMBIO AQUÍ: Añadir un fondo claro al label del checkbox --- */
+.registration-form .form-check-label {
+  color: #ffffff !important; /* Un gris oscuro o negro para mayor contraste */
+  font-weight: bold; /* Hacer el texto más negrita para mejor legibilidad */
+  padding: 0px 5px; /* Un poco de padding alrededor del texto */
+  border-radius: 5px; /* Bordes ligeramente redondeados */
+  display: inline-block; /* Para que el fondo solo abarque el texto */
+  margin-left: 2px; /* Separación del checkbox */
+}
+/* ---------------------------------------------------------------- */
+
+/* Media Queries para Responsividad (ejemplos, ajusta según tus necesidades) */
+@media (max-width: 768px) {
+  .register-form .btn-register {
+    width: 80%; /* En pantallas más pequeñas, que ocupe más ancho */
+  }
+}
+
+@media (max-width: 576px) {
+  .register-form .btn-register {
+    width: 100%; /* En móviles, que ocupe todo el ancho */
+  }
+}

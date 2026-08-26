@@ -1,0 +1,131 @@
+.cart-container {
+  background-color: #94a2af; /* Dark background */
+  color: #f8f9fa; /* Light text */
+  padding: 20px;
+  margin: 20px auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 900px; /* Ancho máximo para el contenedor */
+}
+
+.cart-container h2 {
+  color: #ffc107; /* Yellowish title */
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.empty-cart {
+  padding: 50px;
+}
+
+.empty-cart h2 {
+  color: #f8f9fa;
+  margin-bottom: 15px;
+}
+
+.empty-cart p {
+  font-size: 1.1em;
+}
+
+.cart-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Espacio entre las tarjetas de ítems */
+  margin-bottom: 30px;
+}
+
+.cart-item-card {
+  background-color: #495057; /* Slightly lighter dark for cards */
+  border: 1px solid #6c757d;
+  border-radius: 8px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cart-item-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 5px;
+  border: 1px solid #dee2e6;
+}
+
+.cart-item-details {
+  flex-grow: 1;
+}
+
+.cart-item-details h4 {
+  color: #e9ecef;
+  margin-bottom: 5px;
+}
+
+.cart-item-details p {
+  margin-bottom: 8px;
+  color: #ced4da;
+  font-size: 0.95em;
+}
+
+.item-quantity-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.item-quantity-control span {
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+.remove-item-btn {
+  align-self: flex-start; /* Alinea el botón en la parte superior derecha */
+}
+
+.cart-summary {
+  background-color: #212529; /* Even darker for summary */
+  border: 1px solid #495057;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: right;
+}
+
+.cart-summary h3 {
+  color: #ffc107;
+  margin-bottom: 20px;
+}
+
+.cart-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .cart-item-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  .cart-item-image {
+    margin-bottom: 10px;
+  }
+  .cart-item-details {
+    text-align: center;
+  }
+  .item-quantity-control {
+    justify-content: center;
+  }
+  .remove-item-btn {
+    width: 100%;
+    margin-top: 10px;
+  }
+  .cart-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .cart-actions .btn {
+    width: 100%;
+  }
+}

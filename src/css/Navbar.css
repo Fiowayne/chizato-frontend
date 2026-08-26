@@ -1,0 +1,85 @@
+.search-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
+  background-color: white;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.15);
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+}
+
+
+.movie-result-item {
+  display: flex;
+  align-items: start;
+  border: 1px solid #dee2e6;
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  background-color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+
+.movie-poster {
+  width: 60px;
+  height: 90px;
+  object-fit: cover;
+}
+
+.movie-result-item:hover {
+  background-color: #003366;
+  color: white;
+  border-color: #003366;
+}
+
+.genre-scroll {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.Logo-home {
+  height: 80px;
+  width: 260px;
+}
+
+nav.navbar-01 {
+  padding: 0;
+  background-image: linear-gradient(to top, #171a21, #2d3542);
+  position: relative; 
+  z-index: 1030; 
+}
+
+
+
+.navbar-nav .nav-link.text-white:hover,
+.navbar-nav .nav-link.dropdown-toggle.text-white:hover,
+#dropdownAccount.text-white:hover {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(255, 255, 255, 0.75)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.navbar-toggler:hover .navbar-toggler-icon,
+.navbar-toggler:focus .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+
+
+@media (max-width: 899px) {
+  .dropdown-menu-user {
+    position: absolute;
+    right: 0; 
+    left: auto; 
+    transform: translateX(40%);
+  }
+}
