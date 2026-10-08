@@ -1,117 +1,290 @@
-# Frontend — Chisato Zone (Control de Stock)
+# Documentación Técnica — Chisato Zone (Control de Stock)
 
-Aplicación React para catálogo, compras y panel administrador.
+**Proyecto:** Sistema de control de stock para local comercial  
+**Autor:** Equipo Chisato Zone  
+**Fecha:** Agosto 2026  
+**Versión:** 1.0  
 
-**Demo:** https://chisato-lib2.netlify.app  
-**Backend API:** https://chizatoback.onrender.com  
-**Backend repo:** https://github.com/LeandroVerdun/chizatoBack
+---
 
-## Tecnologías
+## 1. Introducción
 
-- React 19 + Vite
-- React Router DOM
-- Axios
-- Bootstrap 5 + CSS personalizado
-- jwt-decode
+### 1.1 Objetivo del sistema
 
-## Funcionalidades
+Permitir al administrador de un local comercial controlar el stock de productos a la venta, administrar el catálogo, gestionar usuarios registrados y ofrecer a los clientes una interfaz para explorar productos, filtrarlos por categoría y realizar compras.
 
-### Público
-- Página principal con catálogo y **filtro por categorías**
-- Detalle de producto, búsqueda, carrito
-- Registro, login, quiénes somos, **contacto**
-- Diseño **responsive**
+### 1.2 Alcance
 
-### Usuario autenticado
-- Carrito, checkout, historial de compras, perfil
+- Catálogo público con filtro por categorías
+- Registro e inicio de sesión de usuarios
+- Carrito de compras y órdenes
+- Panel administrador: CRUD productos, control de stock, usuarios y órdenes
+- Carga de imágenes de productos al servidor
+- Suspensión de cuentas de usuario
 
-### Administrador
-- **Administrar Productos** (`/admin`) — CRUD con carga de imagen
-- **Control de Stock** (`/admin/stock`) — sección separada
-- **Usuarios** (`/admin/users`) — editar, suspender, eliminar
-- **Órdenes** (`/admin/orders`)
+### 1.3 Repositorios
 
-## Estructura
+| Componente | Repositorio | URL demo |
+|------------|-------------|----------|
+| Frontend | Repositorio React independiente | https://chisato-lib2.netlify.app |
+| Backend | https://github.com/LeandroVerdun/chizatoBack | https://chizatoback.onrender.com |
+
+---
+
+## 2. Arquitectura del sistema
+
+### 2.1 Diagrama general
 
 ```
-d-project-main/src/
-├── assets/          # Páginas, layout, imágenes
-├── component/       # Componentes UI
-│   └── admin/       # Panel administrador
-├── services/        # API (axios)
-├── utils/           # httpErrors, productImage
-└── App.jsx          # Rutas
+┌─────────────────┐         HTTP/REST          ┌─────────────────┐
+│   React (Vite)  │  ◄──────────────────────►  │  Express API    │
+│   Puerto 5173   │         Axios + JWT        │  Puerto 5000    │
+└─────────────────┘                            └────────┬────────┘
+                                                        │
+                        ┌───────────────────────────────┼───────────────┐
+                        │                               │               │
+                        ▼                               ▼               ▼
+                 ┌─────────────┐              ┌─────────────┐  ┌─────────────┐
+                 │   MongoDB   │              │  /uploads   │  │    JWT      │
+                 │  (Mongoose) │              │  (imágenes) │  │   bcrypt    │
+                 └─────────────┘              └─────────────┘  └─────────────┘
 ```
 
-## Rutas principales
+### 2.2 Patrón de diseño
 
-| Ruta | Descripción |
-|------|-------------|
-| `/` | Inicio + catálogo filtrable |
-| `/products` | Catálogo completo |
-| `/contact` | Contacto |
-| `/about` | Quiénes somos |
-| `/admin` | CRUD productos |
-| `/admin/stock` | Control de stock |
-| `/admin/users` | Gestión usuarios |
-| `/recurso-no-encontrado` | Error 404 desde API |
+El backend sigue una arquitectura **MVC adaptada**:
 
-## Variables de entorno
+- **Models** (`src/models/`): esquemas Mongoose
+- **Controllers** (`src/controllers/`): lógica de negocio
+- **Routes** (`src/routes/`): definición de endpoints
+- **Middleware** (`src/middleware/`): autenticación, autorización, upload
 
-Copiá `.env.example` a `.env`:
+El frontend usa **componentes + servicios**:
+
+- **Components**: UI y páginas
+- **Services**: consumo de API con Axios
+- **Utils**: helpers (imágenes, errores HTTP)
+
+---
+
+## 3. Modelo de datos (MongoDB)
+
+### 3.1 Colección `users`
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| `_id` | ObjectId | Identificador único |
+| `name` | String | Nombre completo |
+| `email` | String | Email único |
+| `password` | String | Hash bcrypt |
+| `isAdmin` | Boolean | Rol administrador (default: false) |
+| `isSuspended` | Boolean | Cuenta suspendida (default: false) |
+
+### 3.2 Colección `products`
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| `_id` | ObjectId | Identificador único |
+| `name` | String | Nombre del producto (único) |
+| `stock` | Number | Unidades disponibles (min: 0) |
+| `description` | String | Descripción |
+| `category` | String | Categoría para filtros |
+| `author` | String | Autor (contexto librería) |
+| `image` | String | Ruta local `/uploads/...` o URL externa |
+| `rating` | Number | Valoración 1-5 |
+| `price` | Number | Precio en ARS |
+| `lastStockControlDate` | Date | Fecha último control de stock |
+| `createdAt` / `updatedAt` | Date | Timestamps automáticos |
+
+### 3.3 Colecciones adicionales
+
+- **carts**: carrito por usuario autenticado
+- **orders**: órdenes de compra con items y estado
+
+---
+
+## 4. Roles y permisos
+
+| Rol | Permisos |
+|-----|----------|
+| **Visitante** | Ver catálogo, registrarse, contacto, quiénes somos |
+| **Usuario** | Comprar, carrito, perfil, historial de compras |
+| **Administrador** | CRUD productos, control stock, gestionar usuarios, ver órdenes, subir imágenes |
+
+### Middleware de seguridad
+
+- `verifyToken`: valida JWT en header `Authorization: Bearer <token>`
+- `isAdmin`: exige `isAdmin: true` en el token
+- `isAdminOrSelf`: admin o propio usuario (perfil)
+
+---
+
+## 5. API REST — Endpoints principales
+
+### 5.1 Usuarios (`/api/users`)
+
+| Método | Ruta | Acceso | Descripción |
+|--------|------|--------|-------------|
+| POST | `/register` | Público | Registro |
+| POST | `/login` | Público | Login → JWT |
+| GET | `/` | Admin | Listar usuarios |
+| GET | `/:id` | Admin o self | Obtener usuario |
+| PUT | `/:id` | Admin o self | Actualizar usuario |
+| DELETE | `/:id` | Admin | Eliminar usuario |
+| POST | `/forgot-password` | Público | Recuperación simulada |
+
+### 5.2 Productos (`/api/products`)
+
+| Método | Ruta | Acceso | Descripción |
+|--------|------|--------|-------------|
+| GET | `/` | Público | Listar productos |
+| GET | `/search?q=` | Público | Buscar |
+| GET | `/:id` | Público | Detalle |
+| POST | `/upload-image` | Admin | Subir imagen (multipart) |
+| POST | `/` | Admin | Crear producto |
+| PUT | `/:id` | Admin | Actualizar producto |
+| DELETE | `/:id` | Admin | Eliminar producto |
+| PATCH | `/adjust-stock/:id` | Admin | Ajustar stock |
+
+### 5.3 Códigos de estado HTTP
+
+| Código | Uso |
+|--------|-----|
+| 200 | Operación exitosa |
+| 201 | Recurso creado |
+| 400 | Datos inválidos |
+| 401 | No autenticado |
+| 403 | Sin permisos / cuenta suspendida |
+| 404 | Recurso o ruta no encontrada |
+| 500 | Error interno |
+
+El frontend consume estos códigos mediante `utils/httpErrors.js` y muestra mensajes al usuario. Las rutas inexistentes de API devuelven 404 desde el backend; el frontend tiene `/recurso-no-encontrado` para errores de recursos.
+
+---
+
+## 6. Frontend — Estructura y rutas
+
+### 6.1 Rutas públicas
+
+| Ruta | Componente | Descripción |
+|------|------------|-------------|
+| `/` | HomePage | Destacados + catálogo con filtro |
+| `/products` | ProductList | Catálogo completo |
+| `/products/:id` | ProductDetail | Detalle de producto |
+| `/about` | AboutUs | Quiénes somos |
+| `/contact` | Contact | Formulario de contacto |
+| `/login` | Login | Inicio de sesión |
+| `/register` | Register | Registro |
+
+### 6.2 Rutas administrador
+
+| Ruta | Componente | Descripción |
+|------|------------|-------------|
+| `/admin` | AdminPage | CRUD productos |
+| `/admin/stock` | StockManagementPage | Control de stock |
+| `/admin/users` | UserManagementPage | Gestión usuarios |
+| `/admin/orders` | AdminOrderHistoryPage | Historial órdenes |
+
+### 6.3 Carga de imágenes
+
+1. Admin selecciona archivo en el modal de producto
+2. Frontend envía `POST /api/products/upload-image` (FormData)
+3. Backend guarda en `uploads/products/` con Multer
+4. Retorna ruta `/uploads/products/<archivo>`
+5. Se almacena en MongoDB y se sirve vía `express.static`
+
+---
+
+## 7. Variables de entorno
+
+### Backend (`.env`)
+
+```env
+PORT=5000
+MONGO_URI=mongodb://localhost:27017/control-stock
+JWT_SECRET=clave_secreta_larga
+CORS_ORIGINS=http://localhost:5173,https://chisato-lib2.netlify.app
+```
+
+### Frontend (`.env`)
 
 ```env
 VITE_API_URL=http://localhost:5000
 ```
 
-Producción (Netlify):
+---
 
-```env
-VITE_API_URL=https://chizatoback.onrender.com
-```
+## 8. Instalación y ejecución
 
-## Instalación
+### Requisitos
+
+- Node.js 18+ LTS
+- MongoDB local o MongoDB Atlas
+- npm
+
+### Backend
 
 ```bash
+cd chizatoBack-main
+npm install
+copy .env.example .env
+node initAdmin.js
+npm start
+```
+
+### Frontend
+
+```bash
+cd d-project-main
 npm install
 copy .env.example .env
 npm run dev
 ```
 
-Abrir http://localhost:5173
+---
 
-## Build producción
+## 9. Validaciones implementadas
 
-```bash
-npm run build
-npm run preview
-```
+### Backend
 
-Deploy en Netlify: directorio de publicación `dist`, variable `VITE_API_URL` apuntando al backend.
+- Email formato válido y contraseña mín. 6 caracteres en registro
+- Stock y precio no negativos
+- Ajuste de stock no puede dejar inventario negativo
+- Solo admin modifica roles y suspensiones
+- Upload: solo imágenes JPG/PNG/WEBP/GIF, máx. 5 MB
 
-## Imágenes de productos
+### Frontend
 
-- **Subir archivo:** se envía al backend y se guarda en `/uploads/products/`
-- **URL externa:** sigue soportada
-- Helper `getProductImageUrl()` resuelve rutas locales y URLs
+- Validación de formularios (registro, contacto, productos)
+- Mensajes de error desde respuesta API
+- Protección de rutas admin con `ProtectedUserAdmin`
 
-## Manejo de errores
+---
 
-- `utils/httpErrors.js` — mensajes centralizados por código HTTP
-- Interceptor Axios adjunta `error.userMessage`
-- Login y formularios admin muestran mensajes del backend
+## 10. Deploy
 
-## Documentación del proyecto
+| Servicio | Uso |
+|----------|-----|
+| Netlify | Frontend estático (build Vite) |
+| Render | Backend Node.js |
+| MongoDB Atlas | Base de datos en producción |
 
-- [Documentación técnica](../docs/DOCUMENTACION_TECNICA.md)
-- [Relevamiento versiones](../docs/RELEVAMIENTO_VERSIONES.md)
-- [Mockup](../docs/mockup.html) — abrir en navegador
-- [Guía Trello](../docs/TRELLO.md)
-- [Generar PDF](../docs/GENERAR_PDF.md)
+**Nota:** En Render el filesystem es efímero; las imágenes subidas localmente se pierden al reiniciar. Para producción con uploads persistentes se recomienda Cloudinary o S3.
 
-## Credenciales admin (local)
+---
 
-Tras ejecutar `node initAdmin.js` en el backend:
+## 11. Mockup y gestión del proyecto
 
-- Email: `chizato@gmail.com`
-- Contraseña: `1234`
+- **Mockup visual:** `docs/mockup.html` — wireframes de pantallas principales
+- **Tablero Trello:** ver `docs/TRELLO.md` para estructura de columnas y tareas
+- **Relevamiento de versiones:** ver `docs/RELEVAMIENTO_VERSIONES.md` — comparativa entre el estado inicial del proyecto y la versión actual
+
+---
+
+## 12. Conclusión
+
+El sistema cumple los requisitos del proyecto académico de Control de Stock: arquitectura desacoplada, autenticación segura, CRUD protegido, control de inventario separado de la gestión de productos, filtro por categorías, gestión de usuarios con suspensión, manejo de errores HTTP y documentación completa.
+
+---
+
+*Para exportar este documento a PDF, ver `docs/GENERAR_PDF.md`.*
